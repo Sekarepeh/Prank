@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SISTEM_FAILURE_DETECTED</title>
+    <style>
+        body { background: black; color: #ff0000; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: center; }
+        .mobile-screen { width: 100%; height: 100%; max-width: 450px; background: #000; padding: 30px; box-sizing: border-box; position: relative; border: 1px solid #333; }
+        #console { font-size: 13px; color: #00ff00; white-space: pre-wrap; height: 60%; overflow: hidden; }
+        .alert-box { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #f00; color: #fff; width: 85%; padding: 25px; border: 4px solid #fff; text-align: center; z-index: 999; box-shadow: 0 0 50px #f00; }
+        .blink { animation: blinker 0.15s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+        
+        /* Pop-up Verifikasi (Awal) */
+        #modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,1); display: flex; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: #111; color: #fff; padding: 40px; border-radius: 15px; text-align: center; border: 2px solid #0f0; }
+        #btn-start { background: #0f0; color: #000; border: none; padding: 15px 40px; border-radius: 25px; font-weight: bold; font-size: 18px; cursor: pointer; margin-top: 20px; box-shadow: 0 0 20px #0f0; }
+
+        /* Pop-up Trap (Saat Mau Keluar) */
+        #exit-trap { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,0,0,0.9); z-index: 3000; justify-content: center; align-items: center; text-align: center; color: white; }
+        #exit-trap.show { display: flex; }
+    </style>
+</head>
+<body>
+
+<div id="modal">
+    <div class="modal-content">
+        <h1 style="color: #0f0;">UPDATE SISTEM</h1>
+        <p>Versi terbaru tersedia.<br>Klik tombol untuk konfirmasi.</p>
+        <button id="btn-start" onclick="launchChaos()">KONFIRMASI</button>
+    </div>
+</div>
+
+<div class="mobile-screen" id="app-screen">
+    <div id="console">>> SCANNING HARDWARE...<br>>> TARGET_DEVICE: ANDROID_PHONE<br>>> [WAITING_FOR_USER]</div>
+    <div id="scaryBox" class="alert-box">
+        <h1 class="blink">!! WARNING !!</h1>
+        <p>MALWARE DETECTED: TRJN_STEALER<br>DELETING ALL MEDIA FILES...</p>
+    </div>
+</div>
+
+<div id="exit-trap">
+    <div class="modal-content" style="border: 2px solid white; background: #900;">
+        <h1 class="blink" style="color:white">!! FATAL ERROR !!</h1>
+        <p>TINDAKAN ILEGAL DETEKSI!<br>MENGHAPUS SELURUH DATA DALAM:</p>
+        <h1 id="countdown" style="font-size: 80px; color: yellow; margin: 10px 0;">3</h1>
+        <p>DO NOT TURN OFF YOUR DEVICE</p>
+    </div>
+</div>
+
+<script>
+    let active = false;
+    // Pake suara sirine darurat
+    const siren = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'); 
+    siren.loop = true;
+
+    function launchChaos() {
+        if(active) return;
+        active = true;
+
+        // Tutup Pop-up Awal
+        document.getElementById('modal').style.display = 'none';
+
+        // 1. FULLSCREEN (Wajib)
+        const doc = document.documentElement;
+        if (doc.requestFullscreen) doc.requestFullscreen();
+        else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
+
+        // 2. SUARA (Mulai bunyi)
+        siren.play();
+
+        // 3. GETAR (Vibration)
+        if ("vibrate" in navigator) {
+            navigator.vibrate([200, 100, 200, 100, 500, 100, 200]);
+            setInterval(() => { navigator.vibrate([300, 100, 300]); }, 1000);
+        }
+
+        // 4. ANIMASI LOGIKA
+        let con = document.getElementById('console');
+        con.innerHTML = ">> EXPLOITING KERNEL...<br>>> ACCESSING CONTACTS...<br>>> BYPASSING SECURITY...<br>>> [FATAL_ERROR]";
+        
+        setTimeout(() => {
+            document.getElementById('scaryBox').style.display = 'block';
+        }, 1500);
+
+        // 5. JEBAKAN KELUAR (Trigger)
+        // Kalau dia ganti tab atau minimize browser
+        document.addEventListener("visibilitychange", triggerTrap);
+        // Kalau dia pake tombol 'Back' (khusus Android/History manipulation)
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = triggerTrap;
+    }
+
+    // FUNGSI JEBAKAN (Total Trap)
+    function triggerTrap() {
+        if (!active) return; // Belum jalan pranknya
+
+        // Tampilkan Pop-up Trap Merah
+        document.getElementById('exit-trap').classList.add('show');
+        
+        // Pake suara sirine yang lebih panik (opsional, pake sirine lama aja)
+        
+        // Hitung Mundur 3 Detik
+        let count = 3;
+        let cInterval = setInterval(() => {
+            if(count > 1) {
+                count--;
+                document.getElementById('countdown').innerText = count;
+            } else {
+                clearInterval(cInterval);
+                // 6. LAYAR ITEM TOTAL
+                document.getElementById('exit-trap').innerHTML = ""; // Hapus konten
+                document.body.style.background = "black";
+                document.getElementById('app-screen').style.display = "none";
+                document.body.innerHTML = "<div style='width:100%; height:100vh; background:black;'></div>";
+                
+                // Suara & getar tetep jalan di background (biar serem)
+                if ("vibrate" in navigator) navigator.vibrate([2000]); // Getar panjang terakhir
+            }
+        }, 1000);
+    }
+</script>
+</body>
+</html>
