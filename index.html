@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistem Terbaca!</title>
+    <style>
+        /* Bikin background item total & tulisan ijo hacker */
+        body { 
+            background: black; 
+            color: #00ff00; 
+            font-family: 'Courier New', monospace; 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh;
+        }
+
+        /* Mockup Tampilan Layar HP */
+        .mobile-screen {
+            width: 100%;
+            height: 100%;
+            max-width: 400px; /* Lebar HP standar */
+            max-height: 800px; /* Tinggi HP standar */
+            border: 2px solid #333;
+            border-radius: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+            background: #050505;
+        }
+
+        #console {
+            width: 100%;
+            height: calc(100% - 20px);
+            overflow: hidden;
+            font-size: 14px;
+            line-height: 1.4;
+            white-space: pre-wrap; /* Biar baris baru kebaca */
+        }
+
+        /* Tampilan Peringatan Jumpscare (Panik) */
+        .alert-box {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #990000;
+            color: white;
+            padding: 30px;
+            border: 3px solid white;
+            border-radius: 10px;
+            width: 80%;
+            text-align: center;
+            z-index: 100;
+        }
+
+        /* Efek Kedip-kedip (Blinking) */
+        .blink { animation: blinker 0.2s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+        
+        .progress-bar {
+            width: 100%;
+            background: #333;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        
+        #progress-fill {
+            height: 10px;
+            background: #00ff00;
+            width: 0%;
+            border-radius: 5px;
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+<body onclick="startSilentPrank()">
+
+<div class="mobile-screen">
+    <div id="console">ACCESSING... \nSYSTEM_INFO... \nWAITING_FOR_USER_INPUT... \n\n[ KLIK LAYAR UNTUK MEMULAI DIAGNOSTIK ]</div>
+    
+    <div id="scaryBox" class="alert-box">
+        <h1><span class="blink">FATAL ERROR!</span></h1>
+        <h2>KERUSAKAN SISTEM TERDETEKSI</h2>
+        <p>MENGHAPUS SELURUH FOLDER /STORAGE/EMULATED/0/...</p>
+        <div class="progress-bar"><div id="progress-fill"></div></div>
+        <p id="counter">0% COMPLETE</p>
+    </div>
+</div>
+
+<script>
+    const lines = [
+        "Initializing core...",
+        "Bypassing device security...",
+        "Accessing kernel level...",
+        "IP: 10.0.2.16 LOCKED...",
+        "Dumping contact list...",
+        "Downloading all media files...",
+        "Uploading to C&C Server...",
+        "SYSTEM CRITICAL FAILURE!",
+        "Data wipe sequence initiated..."
+    ];
+    let lineIndex = 0;
+    let prankStarted = false;
+
+    function startSilentPrank() {
+        if (prankStarted) return; // Biar gak dobel klik
+        prankStarted = true;
+        
+        document.getElementById('console').innerText = ""; // Bersihin
+        
+        // Tulis teks satu per satu
+        let interval = setInterval(() => {
+            if (lineIndex < lines.length) {
+                document.getElementById('console').innerText += lines[lineIndex] + "\n";
+                lineIndex++;
+            } else {
+                clearInterval(interval);
+                showSilentPanic();
+            }
+        }, 150); // Kecepatan ngetik
+    }
+
+    function showSilentPanic() {
+        // Tampilkan kotak peringatan
+        document.getElementById('scaryBox').style.display = 'block';
+        
+        let percent = 0;
+        let fillInterval = setInterval(() => {
+            if (percent < 100) {
+                percent++;
+                document.getElementById('counter').innerText = percent + "% COMPLETE";
+                document.getElementById('progress-fill').style.width = percent + "%";
+            } else {
+                clearInterval(fillInterval);
+                // Tambahin teks akhir yang serem
+                document.getElementById('console').innerText += "\n\n[ DATA_WIPE_COMPLETE ]\n_Your device is now empty._";
+            }
+        }, 100); // Kecepatan persentase (10 detik total)
+    }
+</script>
+
+</body>
+</html>
