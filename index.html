@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sistem Keamanan Terbobol!</title>
+    <style>
+        body { background: black; color: #00ff00; font-family: 'Courier New', monospace; overflow: hidden; padding: 20px; }
+        #console { width: 100%; height: 100vh; }
+        .alert { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                 background: red; color: white; padding: 50px; border: 5px solid white; z-index: 100; text-align: center; }
+        blink { animation: blinker 0.1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+    </style>
+</head>
+<body onclick="startPrank()">
+    <div id="console">KLIK DI MANA SAJA UNTUK LANJUTKAN SCANNING...</div>
+    
+    <div id="scaryBox" class="alert">
+        <h1><blink>WARNING!!!</blink></h1>
+        <h2>SISTEM TERDETEKSI ILEGAL</h2>
+        <p>MENGHAPUS SEMUA DATA DI FOLDER /SYSTEM/32...</p>
+        <p id="counter">0%</p>
+    </div>
+
+    <script>
+        const text = "INITIALIZING... \nACCESSING_DATABASE... \nBYPASSING_FIREWALL... \nCRACKING_ENCRYPTION... \nTARGET_IP: 192.168.1.1 \nUSER_DETECTED... \nGEOLOCATION_LOCKED... \nDOWNLOADING_PRIVATE_PHOTOS... \nUPLOADING_LOG_TO_DARKWEB... \nSYSTEM_FAILURE!!!";
+        let i = 0;
+        
+        function startPrank() {
+            // Suara sirine (pake link mp3 eksternal)
+            let audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3');
+            audio.loop = true;
+            
+            let interval = setInterval(() => {
+                document.getElementById('console').innerText += text[i];
+                i++;
+                if (i >= text.length) {
+                    clearInterval(interval);
+                    showJumpcare();
+                }
+            }, 50);
+        }
+
+        function showJumpcare() {
+            document.getElementById('scaryBox').style.display = 'block';
+            let percent = 0;
+            setInterval(() => {
+                if(percent < 100) {
+                    percent++;
+                    document.getElementById('counter').innerText = percent + "% COMPLETE";
+                }
+            }, 50);
+        }
+    </script>
+</body>
+</html>
